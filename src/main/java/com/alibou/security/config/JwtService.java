@@ -15,9 +15,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+/**
+ * a component responsible for various operations related to
+ * JWT (JSON Web Tokens) in a Spring Boot application.
+ * It contains methods for generating, parsing, and validating JWT tokens.
+ */
 @Service
 public class JwtService {
 
+//  a secret cryptographic key used to sign and verify JWTs
   @Value("${application.security.jwt.secret-key}")
   private String secretKey;
   @Value("${application.security.jwt.expiration}")
@@ -29,6 +35,21 @@ public class JwtService {
     return extractClaim(token, Claims::getSubject);
   }
 
+  /**
+   *
+   * @param token
+   * @param claimsResolver
+   * @return
+   * @param <T>
+   */
+  //A claim is a piece of information that is
+  // included within a JSON Web Token (JWT).
+  // It is a key-value pair that provides
+  // additional data about the user or the
+  // token itself. Claims can be used to store
+  // various types of information,
+  // such as the user's name, email, roles,
+  // or token expiration time.
   public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
     final Claims claims = extractAllClaims(token);
     return claimsResolver.apply(claims);

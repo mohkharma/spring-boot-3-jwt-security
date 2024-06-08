@@ -24,6 +24,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 @RequiredArgsConstructor
+/**
+ * Implement JwtAuthenticationFilter which extends OncePerRequestFilter to override the
+ * `doFilterInternal` method, which gets invoked for every request to our application.
+ * This method is responsible for processing incoming
+ * requests by inspecting the “Authorization” header to identify and validate a Bearer token.
+ */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtService jwtService;
@@ -36,6 +42,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain
   ) throws ServletException, IOException {
+    //skip processing the authentication for requests that
+    // are intended for the authentication endpoint.
     if (request.getServletPath().contains("/api/v1/auth")) {
       filterChain.doFilter(request, response);
       return;
